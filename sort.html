@@ -1,0 +1,31 @@
+{{ ##
+    Description: Renders a dropdown list to select the sorting
+                 type of the products on the spot list
+    Params:
+      - page_type: type of page the component will be rendered (can be "search" or "hotsite")
+    Usage:
+      sort page_type: type
+## }}
+
+<div class="flex flex-col lg:flex-row w-full lg:w-auto lg:justify-between lg:items-center"> 
+    {{ sort_options = {} }}
+    {{~ if page_type == "search" ~}}
+        {{~ sort_options = settings.sort.search.options ~}}
+    {{~ else if page_type == "hotsite" ~}}
+        {{~ sort_options = settings.sort.hotsite.options ~}}
+    {{~ end ~}}
+    
+    <div class="relative">
+        <div 
+            class="selected-option cursor-pointer bg-mainBg md:rounded-full py-3 md:py-2 border border-[#1A1E50] px-4 text-base md:text-sm min-w-56 relative z-20 bg-arrowSelect bg-rightCenter bg-no-repeat"
+            onclick="sortListOpen(this);"
+        >
+            {{ "Selecione" | lang }}
+        </div>
+        <ul id="sort-options-container" class="px-6 pb-2 pt-6 md:shadow rounded-b-xl -mt-4 w-full bg-mainBg md:absolute z-10 md:max-h-64 md:overflow-y-auto hidden">
+            {{~ for option in sort_options ~}}
+                <div class="sort-option text-sm my-2 cursor-pointer" data-value="{{option.setting.key}}:{{option.setting.direction}}" onclick="sortResult('{{option.setting.key}}:{{option.setting.direction}}', '{{option.name}}');">{{option.name}}</div>
+            {{~ end ~}}
+        </ul>
+    </div>
+</div>
